@@ -40,7 +40,19 @@ namespace ET.Demo.Account
             }
 
             //第三部 验证服务器是不是有记录 没有记录要注册一个账号
+            AccountData accountData = null;
+            List<AccountData> accountList =  await DBManagerComponent.Instance.GetZoneDB(session.DomainZone()).
+                Query<AccountData>(d=>d.accountName.Equals (request.Account.Trim()));
 
+            if (accountList .Count > 0)
+            {
+                accountData = accountList[0];
+            }
+            else
+            {
+                accountData = session.AddChild<AccountData>();
+                accountData .accountName = request.Account;
+            }
 
             await ETTask.CompletedTask;
         }
