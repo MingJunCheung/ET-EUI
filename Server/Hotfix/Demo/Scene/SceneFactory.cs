@@ -36,6 +36,15 @@ namespace ET
                 case SceneType.Location:
                     scene.AddComponent<LocationComponent>();
                     break;
+                case SceneType.Account:
+                    scene.AddComponent<NetKcpComponent, IPEndPoint, int>
+                        (startSceneConfig.OuterIPPort, SessionStreamDispatcherType.SessionStreamDispatcherServerOuter);
+                    scene.AddComponent<AccountLoginComponent>();
+
+                    break;
+                case SceneType.LoginCenter:
+
+                    break;
             }
 
             return scene;

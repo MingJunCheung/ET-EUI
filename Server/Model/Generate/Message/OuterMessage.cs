@@ -493,4 +493,42 @@ namespace ET
 
 	}
 
+//新的登录注册协议
+	[ResponseType(nameof(A2C_AccountLogin))]
+	[Message(OuterOpcode.C2A_AccountLogin)]
+	[ProtoContract]
+	public partial class C2A_AccountLogin: Object, IRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public string Account { get; set; }
+
+		[ProtoMember(2)]
+		public string Password { get; set; }
+
+	}
+
+	[Message(OuterOpcode.A2C_AccountLogin)]
+	[ProtoContract]
+	public partial class A2C_AccountLogin: Object, IResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public string AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public string Token { get; set; }
+
+	}
+
 }
