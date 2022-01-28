@@ -11,6 +11,7 @@ namespace ET
         public string accountName;
         public string passWord;
         public int accountType;
+        public string creatTime;
     }
 
 

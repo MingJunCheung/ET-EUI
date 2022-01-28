@@ -16,7 +16,7 @@ namespace ET.Demo.Account
             {
                 response.Error = ErrorCode.ERR_AccountScene;
                 reply();
-                session.Dispose();
+                session.Disconnect().Coroutine();
                 return;
             }
             //第二部 验证账号密码的合法性 
@@ -26,7 +26,7 @@ namespace ET.Demo.Account
             {
                 response.Error = ErrorCode.ERR_AccountNull;
                 reply();
-                session.Dispose();
+                session.Disconnect().Coroutine();
                 return;
             }
 
@@ -35,7 +35,7 @@ namespace ET.Demo.Account
             {
                 response.Error = ErrorCode.ERR_AccountRegx;
                 reply();
-                session.Dispose();
+                session.Disconnect().Coroutine();
                 return;
             }
 
@@ -52,7 +52,14 @@ namespace ET.Demo.Account
             {
                 accountData = session.AddChild<AccountData>();
                 accountData .accountName = request.Account;
+                accountData.accountType = (int)AccountType.Normal;
+                accountData.creatTime = TimeHelper.ServerNow().ToString();
             }
+            //第四步 创建一条登录token
+            string token = TimeHelper.ServerNow().ToString() + RandomHelper.RandomNumber(int.MinValue,int.MaxValue);
+            session.DomainScene().GetComponent<AccountTokenComponent>().AddToken(accountData.Id,token);
+
+
 
             await ETTask.CompletedTask;
         }
