@@ -47,4 +47,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Model\Server.Model.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Demo\Account\Helper\" />
+  </ItemGroup>
 </Project>
