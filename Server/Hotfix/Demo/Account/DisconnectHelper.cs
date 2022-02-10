@@ -16,7 +16,7 @@ namespace ET
             }
             long instanceId = self.InstanceId;
 
-            await TimerComponent.Instance.WaitAsync(1000);
+            await TimerComponent.Instance.WaitAsync(5000);
 
             if (instanceId == self.InstanceId)
             {
