@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Security.Cryptography;
 
 namespace ET
@@ -15,5 +16,13 @@ namespace ET
 			}
 			return retVal.ToHex("x2");
 		}
+
+		public static string StringMD5(string Str)
+        {
+			MD5 md5 = MD5.Create();
+            byte[] result = System.Text.Encoding.Default.GetBytes(Str);
+			byte[] outPut = md5.ComputeHash(result);
+			return BitConverter.ToString(outPut).Replace("-", "");
+        }
 	}
 }
