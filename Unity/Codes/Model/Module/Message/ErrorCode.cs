@@ -14,8 +14,12 @@ namespace ET
         // 110000 - 200000是抛异常的错误
         // 200001以上不抛异常
 
-        public const int ERR_AccountNull = 200002;
-        public const int ERR_AccountRegx = 200003;
-        public const int ERR_AccountScene = 200004;
+        public const int ERR_AccountNull = 200002;//账号密码为空
+        public const int ERR_AccountRegx = 200003;//账号密码格式不正确
+        public const int ERR_AccountScene = 200004;//当前服务器不是账号服务器
+        public const int ERR_AccountRequestRepeatly = 200005;//重复请求
+        public const int ERR_AccountBlack = 200006; //黑名单
+        public const int ERR_AccountPassword = 200007; //密码错误
+        public const int ERR_Net = 200008; //网络错误
     }
 }

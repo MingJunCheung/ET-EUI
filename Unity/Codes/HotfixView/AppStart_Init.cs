@@ -24,6 +24,9 @@ namespace ET
             Game.Scene.AddComponent<GlobalComponent>();
 
             Game.Scene.AddComponent<AIDispatcherComponent>();
+
+            //增加账号记录组件
+            Game.Scene.AddComponent<AccountInfoComponent>();
             await ResourcesComponent.Instance.LoadBundleAsync("unit.unity3d");
             
             Scene zoneScene = SceneFactory.CreateZoneScene(1, "Game", Game.Scene);

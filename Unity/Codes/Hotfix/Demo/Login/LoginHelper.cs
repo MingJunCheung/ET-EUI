@@ -5,41 +5,41 @@ namespace ET
 {
     public static class LoginHelper
     {
-        public static async ETTask Login(Scene zoneScene, string address, string account, string password)
+        public static async ETTask<int> Login(Scene zoneScene, string address, string account, string password)
         {
+            A2C_AccountLogin a2CLogin = null;
+            Session session = null;
             try
             {
-                // 创建一个ETModel层的Session
-                R2C_Login r2CLogin;
-                Session session = null;
-                try
-                {
-                    session = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(address));
-                    {
-                        r2CLogin = (R2C_Login) await session.Call(new C2R_Login() { Account = account, Password = password });
-                    }
-                }
-                finally
-                {
-                    session?.Dispose();
-                }
+                session = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(address));
 
-                // 创建一个gate Session,并且保存到SessionComponent中
-                Session gateSession = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(r2CLogin.Address));
-                gateSession.AddComponent<PingComponent>();
-                zoneScene.AddComponent<SessionComponent>().Session = gateSession;
-				
-                G2C_LoginGate g2CLoginGate = (G2C_LoginGate)await gateSession.Call(
-                    new C2G_LoginGate() { Key = r2CLogin.Key, GateId = r2CLogin.GateId});
+                C2A_AccountLogin c2aLogin = new C2A_AccountLogin();
+                c2aLogin.Account = account;
+                c2aLogin.Password = MD5Helper.StringMD5(password); //密码进行加密
 
-                Log.Debug("登陆gate成功!");
-
-                await Game.EventSystem.PublishAsync(new EventType.LoginFinish() {ZoneScene = zoneScene});
+                a2CLogin = (A2C_AccountLogin)await session.Call(c2aLogin);
             }
             catch (Exception e)
             {
+                session.Dispose();
                 Log.Error(e);
+                return ErrorCode.ERR_Net;
             }
-        } 
+
+            if (a2CLogin.Error != ErrorCode.ERR_Success)
+            {
+                session.Dispose();
+                return a2CLogin.Error;
+            }
+
+            zoneScene.AddComponent<SessionComponent>().Session = session;
+            //zoneScene.AddComponent<AccounInfoComponent>();
+
+            AccountInfoComponent infoCom = zoneScene.GetComponent<AccountInfoComponent>();
+            infoCom.accountId = a2CLogin.AccountId;
+            infoCom.token = a2CLogin.Token;
+
+            return ErrorCode.ERR_Success;
+        }
     }
 }
